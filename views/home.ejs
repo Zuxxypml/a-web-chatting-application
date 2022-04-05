@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- Box icon css  -->
+    <link
+      href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+    <title>Zuxxy Web Chat 🚀🚀</title>
+    <style>
+      body {
+        margin: 0;
+        padding-bottom: 3rem;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Helvetica, Arial, sans-serif;
+      }
+      h1 {
+        margin: 10px auto;
+        width: 80%;
+        text-align: center;
+      }
+      #form {
+        background: rgba(0, 0, 0, 0.15);
+        padding: 1rem;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: auto;
+        display: flex;
+        box-sizing: border-box;
+        backdrop-filter: blur(10px);
+      }
+      #input {
+        border: none;
+        padding: 0 1rem;
+        flex-grow: 1;
+        border-radius: 2rem;
+        margin: 0.25rem;
+      }
+      #input:focus,
+      #name:focus {
+        outline: none;
+      }
+      #name {
+        border: none;
+        padding: 0 1rem;
+        flex-grow: 1;
+        border-radius: 2rem;
+        margin: 0.25rem;
+      }
+      #form > button {
+        background: #333;
+        border: none;
+        padding: 0.3rem 1rem;
+        margin: 0.25rem;
+        border-radius: 3px;
+        outline: none;
+        color: #fff;
+        cursor: pointer;
+      }
+
+      #messages {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+      }
+      #messages > li {
+        padding: 0.5rem 1rem;
+      }
+      #messages > li:nth-child(odd) {
+        background: #efefef;
+      }
+      @media screen and (max-width: 996px) {
+        #form {
+          background: rgba(0, 0, 0, 0.15);
+          padding: 1rem;
+          position: fixed;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          width: auto;
+          display: flex;
+          box-sizing: border-box;
+          backdrop-filter: blur(10px);
+        }
+        h1 {
+          font-size: 5rem;
+        }
+        #messages {
+          list-style-type: none;
+          margin: 0;
+          padding: 0;
+          font-size: 3rem;
+        }
+        #messages > li {
+          padding: 0.5rem 1rem;
+        }
+        #input {
+          border: none;
+          padding: 0 1rem;
+          flex-grow: 1;
+          border-radius: 2rem;
+          font-size: 2rem;
+          margin: 0.25rem;
+        }
+        #input:focus,
+        #name:focus {
+          outline: none;
+        }
+        #name {
+          border: none;
+          padding: 0 1rem;
+          flex-grow: 1;
+          border-radius: 2rem;
+          margin: 0.25rem;
+          font-size: 2rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Zuxxy Web Chat 🚀🚀</h1>
+    <ul id="messages"></ul>
+    <form id="form" action="">
+      <input id="name" autocomplete="off" placeholder="Your Name" />
+      <input id="input" autocomplete="off" placeholder="Compose a Message" />
+      <button><i class="bx bx-send bx-md"></i></button>
+    </form>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      let socket = io();
+
+      let messages = document.getElementById("messages");
+      let form = document.getElementById("form");
+      let input = document.getElementById("input");
+      let userName = document.getElementById("name");
+      // if ((userName.value = "")) {
+      //   alert("Please enter a username for Identification");
+      // } else {
+      //   null;
+      // }
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        if (userName.value && input.value) {
+          socket.emit("chat message", input.value, userName.value);
+          input.value = "";
+          userName.value = "";
+        }
+      });
+
+      socket.on("chat message", function (msg, msg2) {
+        let item = document.createElement("li");
+        item.textContent = msg2 + ":" + " " + msg;
+        messages.appendChild(item);
+        window.scrollTo(0, document.body.scrollHeight);
+      });
+    </script>
+  </body>
+</html>
